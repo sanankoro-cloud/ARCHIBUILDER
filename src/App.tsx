@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Project, BuildingElement, EnvironmentElement, WorkStep } from './types';
 import { defaultWorkSteps } from './data';
+import { LandingPage } from './components/LandingPage';
 import { Dashboard } from './components/Dashboard';
 import { BuildingEditor } from './components/BuildingEditor';
 import { EnvironmentManager } from './components/EnvironmentManager';
@@ -20,9 +21,14 @@ const initialProject: Project = {
 };
 
 function App() {
+  const [showLanding, setShowLanding] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
   const [project, setProject] = useState<Project>(initialProject);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  if (showLanding) {
+    return <LandingPage onStart={() => setShowLanding(false)} />;
+  }
 
   const updateBuildingElements = (elements: BuildingElement[]) => {
     setProject(prev => ({ ...prev, buildingElements: elements }));
@@ -80,6 +86,13 @@ function App() {
             <span className="text-xs text-gray-400 hidden sm:inline">
               {project.buildingElements.length} éléments • {project.workSteps.filter(s => s.status === 'completed').length}/{project.workSteps.length} étapes
             </span>
+            <button
+              onClick={() => setShowLanding(true)}
+              className="px-3 py-1.5 text-xs bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-colors font-medium"
+              title="Voir l'aperçu"
+            >
+              👁️ Aperçu
+            </button>
           </div>
         </div>
 
